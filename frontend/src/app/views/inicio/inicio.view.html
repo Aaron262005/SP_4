@@ -1,0 +1,46 @@
+<div class="inicio">
+  <!-- Barra superior: marca, datos del usuario y botón de cerrar sesión (US02) -->
+  <header class="barra">
+    <div class="barra__marca">🛍️ Tienda Online</div>
+
+    <div class="barra__usuario">
+      <!-- El carrito solo se muestra al Cliente -->
+      @if (vm.rol() === 'Cliente') {
+        <span class="barra__carrito" title="Productos en el carrito">🛒 {{ vm.totalCarrito() }}</span>
+      }
+
+      <div class="barra__datos">
+        <span class="barra__nombre">{{ vm.nombre() }}</span>
+        <!-- La clase de color depende del rol -->
+        <span [class]="'insignia insignia--' + (vm.rol() ?? '').toLowerCase()">{{ vm.rol() }}</span>
+      </div>
+
+      <button type="button" class="boton-salir" (click)="vm.cerrarSesion()">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <!-- Contenido: cambia según el perfil asignado en el login -->
+  <main class="contenido">
+    @switch (vm.rol()) {
+      @case ('Administrador') {
+        <section class="panel">
+          <h1>Panel de administración</h1>
+          <p>Bienvenido, {{ vm.nombre() }}. Desde aquí se gestionará la tienda.</p>
+        </section>
+      }
+      @case ('Auditor') {
+        <section class="panel">
+          <h1>Panel de auditoría</h1>
+          <p>Bienvenido, {{ vm.nombre() }}. Desde aquí se consultarán los registros de la tienda.</p>
+        </section>
+      }
+      @default {
+        <section class="panel">
+          <h1>Catálogo de la tienda</h1>
+          <p>Bienvenido, {{ vm.nombre() }}. Aquí podrás explorar los productos y armar tu carrito.</p>
+        </section>
+      }
+    }
+    <p class="nota">Las opciones de cada perfil se agregarán con las siguientes historias de usuario.</p>
+  </main>
+</div>

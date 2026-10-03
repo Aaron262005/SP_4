@@ -1,0 +1,77 @@
+<!-- Pantalla de Login: tarjeta centrada sobre un fondo degradado -->
+<main class="login">
+  <section class="login__tarjeta">
+    <!-- Encabezado con logo y mensaje de bienvenida -->
+    <header class="login__encabezado">
+      <div class="login__logo" aria-hidden="true">🛍️</div>
+      <h1>Tienda Online</h1>
+      <p>Inicia sesión para continuar</p>
+    </header>
+
+    <!-- Alerta roja: solo aparece cuando el ViewModel tiene un error -->
+    @if (vm.error(); as mensaje) {
+      <app-alerta [mensaje]="mensaje" />
+    }
+
+    <!-- (ngSubmit) permite iniciar sesión también con la tecla Enter -->
+    <form (ngSubmit)="vm.iniciarSesion()" novalidate>
+
+      <!-- Campo: usuario -->
+
+      <div class="campo">
+        <label for="usuario">Usuario</label>
+        <div class="campo__control">
+          <span class="campo__icono" aria-hidden="true">👤</span>
+          <input
+            id="usuario"
+            name="usuario"
+            type="text"
+            autocomplete="username"
+            placeholder="Ingresa tu usuario"
+            [ngModel]="vm.nombreUsuario()"
+            (ngModelChange)="vm.nombreUsuario.set($event)"
+            [disabled]="vm.cargando()"
+          />
+        </div>
+      </div>
+
+      <!-- Campo: contraseña, con botón para mostrar/ocultar -->
+
+      <div class="campo">
+        <label for="contrasena">Contraseña</label>
+        <div class="campo__control">
+          <span class="campo__icono" aria-hidden="true">🔒</span>
+          <input
+            id="contrasena"
+            name="contrasena"
+            autocomplete="current-password"
+            placeholder="Ingresa tu contraseña"
+            [type]="vm.mostrarContrasena() ? 'text' : 'password'"
+            [ngModel]="vm.contrasena()"
+            (ngModelChange)="vm.contrasena.set($event)"
+            [disabled]="vm.cargando()"
+          />
+          <button
+            type="button"
+            class="campo__ojo"
+            (click)="vm.alternarVisibilidadContrasena()"
+            [attr.aria-label]="vm.mostrarContrasena() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+          >
+            {{ vm.mostrarContrasena() ? 'Ocultar' : 'Mostrar' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Botón principal: se deshabilita si faltan datos o mientras se procesa -->
+       
+      <button type="submit" class="boton" [disabled]="!vm.formularioValido() || vm.cargando()">
+        @if (vm.cargando()) {
+          <span class="boton__spinner" aria-hidden="true"></span>
+          Ingresando...
+        } @else {
+          Iniciar sesión
+        }
+      </button>
+    </form>
+  </section>
+</main>
