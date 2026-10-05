@@ -20,6 +20,14 @@ export const routes: Routes = [
     loadComponent: () => import('./views/inicio/inicio.view').then((m) => m.InicioView),
   },
 
+  // ===== US03 =====
+  {
+    path: 'catalogo',
+    canActivate: [authGuard], // ruta protegida: requiere sesión
+    loadComponent: () => import('./views/productos/catalogo.view').then((m) => m.CatalogoView),
+  },
+  // ===== FIN US03 =====
+
   // Cualquier ruta desconocida vuelve al inicio.
   { path: '**', redirectTo: 'inicio' },
 ];

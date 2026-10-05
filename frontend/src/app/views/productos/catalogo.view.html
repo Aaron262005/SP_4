@@ -1,0 +1,46 @@
+<div class="catalogo">
+  <!-- Cabecera: enlace para volver y título de la pantalla -->
+  <header class="catalogo__cabecera">
+    <a class="catalogo__volver" routerLink="/inicio">← Volver al inicio</a>
+    <h1>Catálogo de productos</h1>
+  </header>
+
+  <main>
+    @if (vm.cargando()) {
+      <!-- Escenario 2: indicador de carga centrado; role="status" avisa a lectores de pantalla -->
+      <div class="estado" role="status" aria-live="polite">
+        <span class="spinner" aria-hidden="true"></span>
+        <p>Cargando productos…</p>
+      </div>
+    } @else if (vm.error()) {
+      <!-- Escenario 3: mensaje amigable y botón para reintentar -->
+      <div class="estado" role="alert">
+        <p>{{ vm.error() }}</p>
+        <button type="button" class="boton-reintentar" (click)="vm.reintentar()">Reintentar</button>
+      </div>
+    } @else if (vm.productos().length === 0) {
+      <!-- Caso sin datos: evita dejar la pantalla en blanco -->
+      <p class="estado">No hay productos disponibles por el momento.</p>
+    } @else {
+      <!-- Escenario 1: cuadrícula con imagen, título y precio de cada producto -->
+      <ul class="rejilla" aria-label="Lista de productos">
+        @for (producto of vm.productos(); track producto.id) {
+          <li class="tarjeta">
+            <!-- La imagen se descarga en segundo plano (lazy + async) y tiene texto alternativo -->
+            <img
+              class="tarjeta__imagen"
+              [src]="producto.imagen"
+              [alt]="producto.titulo"
+              width="400"
+              height="400"
+              loading="lazy"
+              decoding="async"
+            />
+            <h2 class="tarjeta__titulo">{{ producto.titulo }}</h2>
+            <p class="tarjeta__precio">{{ producto.precio | currency }}</p>
+          </li>
+        }
+      </ul>
+    }
+  </main>
+</div>

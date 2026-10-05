@@ -33,8 +33,14 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 // Handlers de CQRS: cada interfaz se asocia a su implementación.
+
 builder.Services.AddScoped<ICommandHandler<LoginCommand, LoginResponseDto?>, LoginCommandHandler>();
 builder.Services.AddScoped<IQueryHandler<ObtenerUsuarioPorIdQuery, UsuarioDto?>, ObtenerUsuarioPorIdQueryHandler>();
+
+// ===== US03 =====
+builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
+builder.Services.AddScoped<IQueryHandler<ObtenerProductosQuery, IReadOnlyList<ProductoDto>>, ObtenerProductosQueryHandler>();
+// ===== FIN US03 =====
 
 var app = builder.Build();
 
