@@ -1,5 +1,8 @@
 import { Routes } from '@angular/router';
 import { authGuard, invitadoGuard } from './core/guards/auth.guard';
+// ===== US11 =====
+import { adminAuditorGuard } from './core/guards/admin-auditor.guard';
+// ================
 
 /**
  * Rutas de la aplicación. Cada pantalla se carga con LAZY LOADING (loadComponent):
@@ -19,6 +22,14 @@ export const routes: Routes = [
     canActivate: [authGuard], // ruta protegida: requiere sesión
     loadComponent: () => import('./views/inicio/inicio.view').then((m) => m.InicioView),
   },
+
+  // ===== US11 =====
+  { 
+    path: 'directorio', 
+    canActivate: [adminAuditorGuard],
+    loadComponent: () => import('./views/directorio/directorio.view').then(m => m.DirectorioView) 
+  },
+  // ================
 
   // Cualquier ruta desconocida vuelve al inicio.
   { path: '**', redirectTo: 'inicio' },
