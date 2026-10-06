@@ -35,6 +35,11 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 // Handlers de CQRS: cada interfaz se asocia a su implementación.
 builder.Services.AddScoped<ICommandHandler<LoginCommand, LoginResponseDto?>, LoginCommandHandler>();
 builder.Services.AddScoped<IQueryHandler<ObtenerUsuarioPorIdQuery, UsuarioDto?>, ObtenerUsuarioPorIdQueryHandler>();
+// ===== US12 =====
+builder.Services.AddScoped<TiendaOnline.Domain.Interfaces.ICarritoGlobalRepository, TiendaOnline.Infrastructure.Repositories.CarritoGlobalRepository>();
+builder.Services.AddScoped<TiendaOnline.Domain.Interfaces.IProductoGlobalRepository, TiendaOnline.Infrastructure.Repositories.ProductoGlobalRepository>();
+builder.Services.AddScoped<TiendaOnline.Application.Interfaces.IQueryHandler<TiendaOnline.Application.Queries.ObtenerHistorialCarritosQuery, IEnumerable<TiendaOnline.Application.DTOs.HistorialCarritoDto>>, TiendaOnline.Application.Handlers.QueryHandlers.ObtenerHistorialCarritosQueryHandler>();
+// ================
 
 var app = builder.Build();
 

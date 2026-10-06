@@ -1,0 +1,54 @@
+.historial-container {
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+
+  h2 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+}
+
+.cargando-texto {
+  color: #666;
+  font-style: italic;
+}
+
+.carrito-card {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  background: white;
+  transition: background 0.2s;
+
+  &:hover { 
+    background: #f8f9fa; 
+  }
+
+  .carrito-header {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .carrito-body {
+    padding: 15px;
+    border-top: 1px solid #eee;
+    background: #fdfdfd;
+    cursor: default;
+
+    h4 {
+      margin-top: 0;
+      color: #0056b3;
+    }
+
+    ul { 
+      padding-left: 20px; 
+      li {
+        margin-bottom: 5px;
+      }
+    }
+  }
+}
