@@ -17,8 +17,9 @@ import { CatalogoViewModel } from '../../viewmodels/productos/catalogo.viewmodel
 export class CatalogoView implements OnInit {
   readonly vm = inject(CatalogoViewModel);
 
-  /** Al entrar a la pantalla se pide el catálogo. */
+  /** Al entrar a la pantalla se piden las categorías (US04) y el catálogo (US03). */
   ngOnInit(): void {
+    this.vm.cargarCategorias();
     this.vm.cargar();
   }
 }

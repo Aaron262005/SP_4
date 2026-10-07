@@ -41,6 +41,11 @@ builder.Services.AddScoped<IQueryHandler<ObtenerUsuarioPorIdQuery, UsuarioDto?>,
 builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
 builder.Services.AddScoped<IQueryHandler<ObtenerProductosQuery, IReadOnlyList<ProductoDto>>, ObtenerProductosQueryHandler>();
 // ===== FIN US03 =====
+// ===== US04 =====
+builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+builder.Services.AddScoped<IQueryHandler<ObtenerCategoriasQuery, IReadOnlyList<string>>, ObtenerCategoriasQueryHandler>();
+builder.Services.AddScoped<IQueryHandler<ObtenerProductosPorCategoriaQuery, IReadOnlyList<ProductoDto>>, ObtenerProductosPorCategoriaQueryHandler>();
+// ===== FIN US04 =====
 
 var app = builder.Build();
 
