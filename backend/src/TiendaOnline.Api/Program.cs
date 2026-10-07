@@ -36,6 +36,16 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ICommandHandler<LoginCommand, LoginResponseDto?>, LoginCommandHandler>();
 builder.Services.AddScoped<IQueryHandler<ObtenerUsuarioPorIdQuery, UsuarioDto?>, ObtenerUsuarioPorIdQueryHandler>();
 
+// ===== US06-US07-US08 =====
+builder.Services.AddTransient<Microsoft.Extensions.Options.IConfigureOptions<Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions>, TiendaOnline.Api.Swagger.ProductosSwagger>();
+builder.Services.AddSingleton<IProductoRepository, ProductoRepository>();
+builder.Services.AddScoped<IValidadorToken, ValidadorToken>();
+builder.Services.AddScoped<TiendaOnline.Api.Filters.AdministradorProductosFilter>();
+builder.Services.AddScoped<IQueryHandler<ObtenerProductosQuery, IReadOnlyList<ProductoDto>>, ObtenerProductosQueryHandler>();
+builder.Services.AddScoped<IQueryHandler<ObtenerProductoPorIdQuery, ProductoDto?>, ObtenerProductoPorIdQueryHandler>();
+builder.Services.AddScoped<ICommandHandler<AgregarProductoCommand, ProductoDto>, AgregarProductoCommandHandler>();
+// ===== FIN US06-US07-US08 =====
+
 var app = builder.Build();
 
 // Swagger solo en desarrollo.

@@ -21,6 +21,9 @@
 
   <!-- Contenido: cambia según el perfil asignado en el login -->
   <main class="contenido">
+    <!-- ===== US06-US07-US08: acceso al módulo de productos ===== -->
+    <p><a href="/productos">Abrir catálogo de productos →</a></p>
+    <!-- ===== FIN US06-US07-US08 ===== -->
     @switch (vm.rol()) {
       @case ('Administrador') {
         <section class="panel">
