@@ -13,8 +13,8 @@ public class ProductosController(
     IQueryHandler<ObtenerProductosQuery, IReadOnlyList<ProductoDto>> listar,
     IQueryHandler<ObtenerProductoPorIdQuery, ProductoDto?> detalle,
     ICommandHandler<AgregarProductoCommand, ProductoDto> agregar,
-    ICommandHandler<EditarProductoCommand, ProductoDto?> editar) : ControllerBase
-
+    ICommandHandler<EditarProductoCommand, ProductoDto?> editar,
+    ICommandHandler<EliminarProductoCommand, ProductoDto?> eliminar) : ControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> Listar(CancellationToken ct) => Ok(await listar.HandleAsync(new ObtenerProductosQuery(), ct));
@@ -44,4 +44,12 @@ public class ProductosController(
         return producto is null ? NotFound(new { mensaje = "Producto no encontrado." }) : Ok(producto);
     }
 
+    /// <summary>US08: devuelve el objeto eliminado para confirmar el resultado.</summary>
+    [HttpDelete("{id:int}")]
+    [ServiceFilter(typeof(AdministradorProductosFilter))]
+    public async Task<IActionResult> Eliminar(int id, CancellationToken ct)
+    {
+        var producto = await eliminar.HandleAsync(new EliminarProductoCommand(id), ct);
+        return producto is null ? NotFound(new { mensaje = "Producto no encontrado." }) : Ok(producto);
+    }
 }

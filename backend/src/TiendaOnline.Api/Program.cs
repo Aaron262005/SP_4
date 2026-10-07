@@ -45,6 +45,7 @@ builder.Services.AddScoped<IQueryHandler<ObtenerProductosQuery, IReadOnlyList<Pr
 builder.Services.AddScoped<IQueryHandler<ObtenerProductoPorIdQuery, ProductoDto?>, ObtenerProductoPorIdQueryHandler>();
 builder.Services.AddScoped<ICommandHandler<AgregarProductoCommand, ProductoDto>, AgregarProductoCommandHandler>();
 builder.Services.AddScoped<ICommandHandler<EditarProductoCommand, ProductoDto?>, EditarProductoCommandHandler>();
+builder.Services.AddScoped<ICommandHandler<EliminarProductoCommand, ProductoDto?>, EliminarProductoCommandHandler>();
 // ===== FIN US06-US07-US08 =====
 
 var app = builder.Build();

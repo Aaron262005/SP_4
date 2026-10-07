@@ -15,4 +15,8 @@ import { AlertaComponent } from '../../shared/alerta/alerta.component';
 export class DetalleProductoView implements OnInit {
   readonly vm = inject(DetalleProductoViewModel);
   ngOnInit(): void { this.vm.cargar(); }
+  confirmarEliminacion(): void {
+    // El diálogo nativo pertenece a la View; cancelar no invoca ninguna petición.
+    if (!this.vm.eliminando()) this.vm.eliminar(window.confirm('¿Estás seguro de eliminar este producto?'));
+  }
 }

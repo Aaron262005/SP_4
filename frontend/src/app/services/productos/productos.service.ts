@@ -20,6 +20,9 @@ export class ProductosService {
   editar(id: number, datos: GuardarProducto): Observable<Producto> {
     return this.autorizar(() => this.http.put<Producto>(`${API_URL}/products/${id}`, datos, this.opciones()));
   }
+  eliminar(id: number): Observable<Producto> {
+    return this.autorizar(() => this.http.delete<Producto>(`${API_URL}/products/${id}`, this.opciones()));
+  }
   private opciones() { return { headers: { Authorization: `Bearer ${this.sesion.token()}` } }; }
   private autorizar(accion: () => Observable<Producto>): Observable<Producto> {
     // Se comprueban los permisos al suscribirse, antes de construir una petición de red.

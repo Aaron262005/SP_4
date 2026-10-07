@@ -11,6 +11,7 @@
         @if (vm.esAdministrador()) {
           <div class="acciones">
             @if (!vm.eliminando()) { <a class="boton" [routerLink]="['/productos', producto.id, 'editar']">Editar</a> }
+            <button class="peligro" type="button" [disabled]="vm.eliminando() || vm.cargando()" (click)="confirmarEliminacion()">{{ vm.eliminando() ? 'Eliminando…' : 'Eliminar' }}</button>
           </div>
         }
       </div>

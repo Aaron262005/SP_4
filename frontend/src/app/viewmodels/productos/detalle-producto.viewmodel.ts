@@ -32,4 +32,16 @@ export class DetalleProductoViewModel {
       error: error => this.error.set(mensajeErrorProductos(error)),
     });
   }
+  eliminar(confirmado: boolean): void {
+    if (!confirmado || this.eliminando() || !this.producto()) return;
+    if (!this.acceso.puedeModificar()) { this.error.set('No tienes permisos para eliminar.'); return; }
+    this.eliminando.set(true); this.error.set('');
+    this.servicio.eliminar(this.id).pipe(takeUntilDestroyed(this.destroyRef), finalize(() => this.eliminando.set(false))).subscribe({
+      next: () => {
+        this.avisos.mostrar('Producto eliminado correctamente (Simulación).');
+        void this.router.navigate(['/productos']);
+      },
+      error: error => this.error.set(mensajeErrorProductos(error)),
+    });
+  }
 }
