@@ -21,4 +21,13 @@ public class FakeDatabase
         new Usuario(5, "cliente.sofia",  "cliente123", "Sofía Lima",   "sofia.lima@correo.com"),
         new Usuario(6, "cliente.diego",  "cliente123", "Diego Mora",   "diego.mora@correo.com"),
     };
+    // ===== US06-US07-US08 =====
+    /// <summary>Inventario de prueba compartido por las tres historias; se reinicia con la API.</summary>
+    public List<Producto> Productos { get; } = new()
+    {
+        new Producto(101, "MSI Titan 18 HX", 45000, "Laptop para trabajo y juegos.", "Electrónica", "https://placehold.co/640x480/png?text=Laptop"),
+        new Producto(102, "Mouse Logitech G Pro", 1200, "Mouse inalámbrico de precisión.", "Accesorios", "https://placehold.co/640x480/png?text=Mouse"),
+        new Producto(103, "Teclado Keychron K2", 1800, "Teclado mecánico compacto.", "Accesorios", "https://placehold.co/640x480/png?text=Teclado")
+    };
+    // ===== FIN US06-US07-US08 =====
 }
