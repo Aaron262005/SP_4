@@ -59,7 +59,7 @@ export class FormularioProductoViewModel {
     const valores = this.formulario.getRawValue();
     const datos = { ...valores, precio: valores.precio!, titulo: valores.titulo.trim(), descripcion: valores.descripcion.trim(), categoria: valores.categoria.trim(), imagen: valores.imagen.trim() };
     this.guardando.set(true);
-    const peticion = this.servicio.agregar(datos);
+    const peticion = this.id === null ? this.servicio.agregar(datos) : this.servicio.editar(this.id, datos);
     peticion.pipe(takeUntilDestroyed(this.destroyRef), finalize(() => this.guardando.set(false))).subscribe({
       next: producto => {
         if (this.id === null) {

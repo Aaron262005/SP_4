@@ -26,6 +26,7 @@ export const routes: Routes = [
   // ===== US06-US07-US08 =====
   { path: 'productos', canActivate: [authGuard], loadComponent: () => import('./views/productos/catalogo.view').then(m => m.CatalogoView) },
   { path: 'productos/nuevo', canActivate: [authGuard, administradorProductosGuard], loadComponent: () => import('./views/productos/formulario-producto.view').then(m => m.FormularioProductoView) },
+  { path: 'productos/:id/editar', canActivate: [authGuard, administradorProductosGuard], loadComponent: () => import('./views/productos/formulario-producto.view').then(m => m.FormularioProductoView) },
   { path: 'productos/:id', canActivate: [authGuard], loadComponent: () => import('./views/productos/detalle-producto.view').then(m => m.DetalleProductoView) },
   // ===== FIN US06-US07-US08 =====
 

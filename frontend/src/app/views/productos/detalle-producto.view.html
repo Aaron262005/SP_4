@@ -10,6 +10,7 @@
         <h1>{{ producto.titulo }}</h1><p class="precio">{{ producto.precio | number:'1.2-2' }}</p><p class="descripcion">{{ producto.descripcion }}</p>
         @if (vm.esAdministrador()) {
           <div class="acciones">
+            @if (!vm.eliminando()) { <a class="boton" [routerLink]="['/productos', producto.id, 'editar']">Editar</a> }
           </div>
         }
       </div>
