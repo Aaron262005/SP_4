@@ -1,11 +1,10 @@
-using System;
-
 namespace TiendaOnline.Domain.Entities;
 
 /// <summary>
-/// Entidad de dominio que representa un artículo de la tienda.
+/// Entidad de dominio que representa un producto válido del inventario.
 /// Los setters son privados: un producto solo se crea por el constructor,
-/// que valida los datos para que nunca exista un producto inválido.
+/// que valida los datos. Los cambios crean otra instancia para evitar
+/// mutaciones parciales.
 /// </summary>
 public class Producto
 {
@@ -18,23 +17,26 @@ public class Producto
 
     public Producto(int id, string titulo, decimal precio, string descripcion, string categoria, string imagen)
     {
-        // Validaciones de negocio: se hacen aquí para proteger a la entidad.
-        if (id <= 0)
-            throw new ArgumentException("El identificador debe ser mayor que cero.", nameof(id));
-        if (string.IsNullOrWhiteSpace(titulo))
-            throw new ArgumentException("El título del producto es obligatorio.", nameof(titulo));
-        if (precio < 0)
-            throw new ArgumentException("El precio no puede ser negativo.", nameof(precio));
-        if (string.IsNullOrWhiteSpace(categoria))
-            throw new ArgumentException("La categoría es obligatoria.", nameof(categoria));
-        if (string.IsNullOrWhiteSpace(imagen))
-            throw new ArgumentException("La imagen es obligatoria.", nameof(imagen));
+        // El identificador debe ser positivo.
+        if (id <= 0) throw new ArgumentException("El ID debe ser positivo.");
 
+        // El precio no puede ser negativo (regla que aportó US03).
+        if (precio < 0) throw new ArgumentException("El precio no puede ser negativo.");
+
+        // Los campos de texto son obligatorios.
+        if (string.IsNullOrWhiteSpace(titulo) || string.IsNullOrWhiteSpace(descripcion) || string.IsNullOrWhiteSpace(categoria))
+            throw new ArgumentException("Completa los campos de texto.");
+
+        // La imagen debe ser una URL absoluta http o https.
+        if (!Uri.TryCreate(imagen, UriKind.Absolute, out var url) || (url.Scheme != "http" && url.Scheme != "https"))
+            throw new ArgumentException("La imagen debe ser una URL HTTP o HTTPS.");
+
+        // Se guardan los valores sin espacios sobrantes.
         Id = id;
-        Titulo = titulo;
+        Titulo = titulo.Trim();
         Precio = precio;
-        Descripcion = descripcion ?? string.Empty;
-        Categoria = categoria;
-        Imagen = imagen;
+        Descripcion = descripcion.Trim();
+        Categoria = categoria.Trim();
+        Imagen = imagen.Trim();
     }
 }
