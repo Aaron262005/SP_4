@@ -14,6 +14,32 @@
     }
   </header>
 
+  <!-- US04: filtro por categoría con chips accesibles; solo aparece si la API devolvió categorías -->
+  @if (vm.categorias().length > 0) {
+    <nav class="filtros" aria-label="Filtrar productos por categoría">
+      <button
+        type="button"
+        class="chip"
+        [class.chip--activo]="vm.categoriaActiva() === null"
+        [attr.aria-pressed]="vm.categoriaActiva() === null"
+        (click)="vm.verTodos()"
+      >
+        Ver todos
+      </button>
+      @for (categoria of vm.categorias(); track categoria) {
+        <button
+          type="button"
+          class="chip"
+          [class.chip--activo]="vm.categoriaActiva() === categoria"
+          [attr.aria-pressed]="vm.categoriaActiva() === categoria"
+          (click)="vm.seleccionarCategoria(categoria)"
+        >
+          {{ categoria }}
+        </button>
+      }
+    </nav>
+  }
+
   <!-- Aviso de resultado de otras pantallas (por ejemplo, producto agregado o eliminado) -->
   @if (vm.mensaje()) {
     <div class="aviso" role="status">

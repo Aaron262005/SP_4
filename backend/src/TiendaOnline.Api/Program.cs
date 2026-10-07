@@ -58,6 +58,12 @@ builder.Services.AddScoped<ICommandHandler<AgregarProductoCommand, ProductoDto>,
 builder.Services.AddScoped<ICommandHandler<EditarProductoCommand, ProductoDto?>, EditarProductoCommandHandler>();
 builder.Services.AddScoped<ICommandHandler<EliminarProductoCommand, ProductoDto?>, EliminarProductoCommandHandler>();
 
+// ===== US04: filtro de productos por categoría =====
+builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+builder.Services.AddScoped<IQueryHandler<ObtenerCategoriasQuery, IReadOnlyList<string>>, ObtenerCategoriasQueryHandler>();
+builder.Services.AddScoped<IQueryHandler<ObtenerProductosPorCategoriaQuery, IReadOnlyList<ProductoDto>>, ObtenerProductosPorCategoriaQueryHandler>();
+// ===== FIN US04 =====
+
 var app = builder.Build();
 
 // Swagger solo en desarrollo.
