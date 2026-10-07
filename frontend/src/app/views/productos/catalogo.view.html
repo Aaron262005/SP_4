@@ -1,22 +1,60 @@
-<!-- Catálogo de apoyo: conserva la navegación y muestra los resultados de las tres operaciones. -->
+<!-- Catálogo de productos (US03) con acciones de administrador (US06, US07 y US08). -->
 <main class="productos-container">
-  <nav><a routerLink="/inicio">← Inicio</a></nav>
-  <header><div><h1>Catálogo de productos</h1><p>Inventario de la tienda</p></div>
-    @if (vm.esAdministrador()) { <a class="boton" routerLink="/productos/nuevo">Agregar producto</a> }
+  <!-- Enlace para volver a la pantalla de inicio -->
+  <nav><a routerLink="/inicio">← Volver al inicio</a></nav>
+
+  <!-- Cabecera: título y, solo para administradores, el botón de agregar (US06) -->
+  <header>
+    <div>
+      <h1>Catálogo de productos</h1>
+      <p>Inventario de la tienda</p>
+    </div>
+    @if (vm.esAdministrador()) {
+      <a class="boton" routerLink="/productos/nuevo">Agregar producto</a>
+    }
   </header>
-  @if (vm.mensaje()) { <div class="aviso" role="status">{{ vm.mensaje() }} <button type="button" (click)="vm.cerrarAviso()" aria-label="Cerrar confirmación">×</button></div> }
-  @if (vm.error()) { <app-alerta [mensaje]="vm.error()" /><button type="button" (click)="vm.cargar()">Reintentar</button> }
-  @if (vm.cargando()) { <p role="status">Cargando productos…</p> }
-  @if (!vm.cargando() && !vm.error()) {
+
+  <!-- Aviso de resultado de otras pantallas (por ejemplo, producto agregado o eliminado) -->
+  @if (vm.mensaje()) {
+    <div class="aviso" role="status">
+      {{ vm.mensaje() }}
+      <button type="button" (click)="vm.cerrarAviso()" aria-label="Cerrar confirmación">×</button>
+    </div>
+  }
+
+  <!-- Solo se muestra uno de estos estados a la vez -->
+  @if (vm.cargando()) {
+    <!-- US03: indicador de carga; role="status" avisa a lectores de pantalla -->
+    <div class="estado" role="status" aria-live="polite">
+      <span class="spinner" aria-hidden="true"></span>
+      <p>Cargando productos…</p>
+    </div>
+  } @else if (vm.error()) {
+    <!-- US03: mensaje amigable y botón para repetir la petición -->
+    <div class="estado" role="alert">
+      <app-alerta [mensaje]="vm.error()" />
+      <button type="button" class="boton-reintentar" (click)="vm.reintentar()">Reintentar</button>
+    </div>
+  } @else {
+    <!-- Cuadrícula con imagen, categoría, título, precio y enlace al detalle de cada producto -->
     <section class="tarjetas-grid" aria-label="Productos">
       @for (producto of vm.productos(); track producto.id) {
-        <article class="tarjeta"><img [src]="producto.imagen" [alt]="producto.titulo" loading="lazy" />
-          <div class="contenido"><span class="categoria">{{ producto.categoria }}</span><h2>{{ producto.titulo }}</h2>
-            <p class="precio">{{ producto.precio | number:'1.2-2' }}</p><a [routerLink]="['/productos', producto.id]">Ver detalle →</a>
+        <article class="tarjeta">
+          <!-- La imagen se descarga en segundo plano y tiene texto alternativo -->
+          <img [src]="producto.imagen" [alt]="producto.titulo" loading="lazy" decoding="async" />
+          <div class="contenido">
+            <span class="categoria">{{ producto.categoria }}</span>
+            <h2>{{ producto.titulo }}</h2>
+            <p class="precio">${{ producto.precio | number:'1.2-2' }}</p>
+            <a [routerLink]="['/productos', producto.id]">Ver detalle →</a>
           </div>
         </article>
-      } @empty { <p>No hay productos en el catálogo.</p> }
+      } @empty {
+        <!-- Caso sin datos: evita dejar la pantalla en blanco -->
+        <p>No hay productos disponibles por el momento.</p>
+      }
     </section>
   }
+
   <p class="nota">Simulación local: el inventario se reinicia al apagar la API.</p>
 </main>

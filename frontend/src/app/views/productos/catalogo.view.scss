@@ -1,2 +1,59 @@
-// Estilo compartido de las tres historias, sin modificar los estilos existentes.
+// Estilo compartido de las historias de productos (US03, US06, US07 y US08).
+// Debe ir primero: trae tarjetas, cuadrícula, botones, avisos, etc.
 @use './productos';
+
+// ===== US03: estados de carga y error =====
+
+// Estados de carga y error: centrados en el área de contenido.
+.estado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 50vh;
+  text-align: center;
+}
+
+// Spinner circular animado.
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #e5e7eb;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Respeta a quien pidió menos movimiento en su sistema.
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 3s;
+  }
+}
+
+// Botón para repetir la petición cuando falla la carga del catálogo.
+.boton-reintentar {
+  padding: 0.6rem 1.4rem;
+  border: 0;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    background: #1d4ed8;
+  }
+
+  &:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 2px;
+  }
+}
