@@ -12,8 +12,8 @@ namespace TiendaOnline.Api.Controllers;
 public class ProductosController(
     IQueryHandler<ObtenerProductosQuery, IReadOnlyList<ProductoDto>> listar,
     IQueryHandler<ObtenerProductoPorIdQuery, ProductoDto?> detalle,
-    ICommandHandler<AgregarProductoCommand, ProductoDto> agregar) : ControllerBase
-
+    ICommandHandler<AgregarProductoCommand, ProductoDto> agregar,
+    ICommandHandler<EditarProductoCommand, ProductoDto?> editar) : ControllerBase
 
 {
     [HttpGet]
@@ -33,6 +33,15 @@ public class ProductosController(
     {
         var producto = await agregar.HandleAsync(new AgregarProductoCommand(datos.Titulo, datos.Precio!.Value, datos.Descripcion, datos.Categoria, datos.Imagen), ct);
         return CreatedAtAction(nameof(Obtener), new { id = producto.Id }, producto);
+    }
+
+    /// <summary>US07: actualiza un producto existente.</summary>
+    [HttpPut("{id:int}")]
+    [ServiceFilter(typeof(AdministradorProductosFilter))]
+    public async Task<IActionResult> Editar(int id, GuardarProductoDto datos, CancellationToken ct)
+    {
+        var producto = await editar.HandleAsync(new EditarProductoCommand(id, datos.Titulo, datos.Precio!.Value, datos.Descripcion, datos.Categoria, datos.Imagen), ct);
+        return producto is null ? NotFound(new { mensaje = "Producto no encontrado." }) : Ok(producto);
     }
 
 }
