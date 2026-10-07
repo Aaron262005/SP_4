@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using TiendaOnline.Api.Filters;
+using TiendaOnline.Application.Commands;
 using TiendaOnline.Application.DTOs;
 using TiendaOnline.Application.Interfaces;
 using TiendaOnline.Application.Queries;
@@ -6,30 +8,60 @@ using TiendaOnline.Application.Queries;
 namespace TiendaOnline.Api.Controllers;
 
 /// <summary>
-/// Endpoints de consulta de productos.
-/// Controller delgado: crea la Query, llama al handler y devuelve el código HTTP.
-/// Para el trabajo de clase no se valida el token aquí, igual que en UsuariosController.
+/// Endpoints de productos. Controller delgado: adapta HTTP a CQRS creando la
+/// Query o el Command, llamando al handler y devolviendo el código HTTP.
+/// La autorización y la persistencia viven fuera del controlador.
 /// </summary>
 [ApiController]
 [Route("products")]
-public class ProductosController : ControllerBase
+public class ProductosController(
+    IQueryHandler<ObtenerProductosQuery, IReadOnlyList<ProductoDto>> listar,
+    IQueryHandler<ObtenerProductoPorIdQuery, ProductoDto?> detalle,
+    ICommandHandler<AgregarProductoCommand, ProductoDto> agregar,
+    ICommandHandler<EditarProductoCommand, ProductoDto?> editar,
+    ICommandHandler<EliminarProductoCommand, ProductoDto?> eliminar) : ControllerBase
 {
-    private readonly IQueryHandler<ObtenerProductosQuery, IReadOnlyList<ProductoDto>> _obtenerProductosHandler;
+    /// <summary>
+    /// US03: devuelve la lista completa de productos del catálogo.
+    /// Es público: cualquier usuario con sesión iniciada puede consultarlo,
+    /// por eso no lleva el filtro de administrador.
+    /// </summary>
+    [HttpGet]
+    public async Task<IActionResult> Listar(CancellationToken ct) =>
+        Ok(await listar.HandleAsync(new ObtenerProductosQuery(), ct));
 
-    public ProductosController(
-        IQueryHandler<ObtenerProductosQuery, IReadOnlyList<ProductoDto>> obtenerProductosHandler)
+    /// <summary>Devuelve el detalle de un producto; 404 si no existe.</summary>
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> Obtener(int id, CancellationToken ct)
     {
-        _obtenerProductosHandler = obtenerProductosHandler;
+        var producto = await detalle.HandleAsync(new ObtenerProductoPorIdQuery(id), ct);
+        return producto is null ? NotFound(new { mensaje = "Producto no encontrado." }) : Ok(producto);
     }
 
-    /// <summary>Devuelve la lista completa de productos disponibles.</summary>
-    [HttpGet]
-    [ProducesResponseType(typeof(IReadOnlyList<ProductoDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> ObtenerTodos(CancellationToken cancellationToken)
+    /// <summary>US06: crea un producto y devuelve su ID generado. Solo administradores.</summary>
+    [HttpPost]
+    [ServiceFilter(typeof(AdministradorProductosFilter))]
+    public async Task<IActionResult> Agregar(GuardarProductoDto datos, CancellationToken ct)
     {
-        var productos = await _obtenerProductosHandler.HandleAsync(
-            new ObtenerProductosQuery(), cancellationToken);
+        var producto = await agregar.HandleAsync(new AgregarProductoCommand(datos.Titulo, datos.Precio!.Value, datos.Descripcion, datos.Categoria, datos.Imagen), ct);
+        return CreatedAtAction(nameof(Obtener), new { id = producto.Id }, producto);
+    }
 
-        return Ok(productos);
+    /// <summary>US07: actualiza un producto existente; 404 si no existe. Solo administradores.</summary>
+    [HttpPut("{id:int}")]
+    [ServiceFilter(typeof(AdministradorProductosFilter))]
+    public async Task<IActionResult> Editar(int id, GuardarProductoDto datos, CancellationToken ct)
+    {
+        var producto = await editar.HandleAsync(new EditarProductoCommand(id, datos.Titulo, datos.Precio!.Value, datos.Descripcion, datos.Categoria, datos.Imagen), ct);
+        return producto is null ? NotFound(new { mensaje = "Producto no encontrado." }) : Ok(producto);
+    }
+
+    /// <summary>US08: elimina un producto y devuelve el objeto eliminado para confirmar el resultado. Solo administradores.</summary>
+    [HttpDelete("{id:int}")]
+    [ServiceFilter(typeof(AdministradorProductosFilter))]
+    public async Task<IActionResult> Eliminar(int id, CancellationToken ct)
+    {
+        var producto = await eliminar.HandleAsync(new EliminarProductoCommand(id), ct);
+        return producto is null ? NotFound(new { mensaje = "Producto no encontrado." }) : Ok(producto);
     }
 }

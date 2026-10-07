@@ -1,46 +1,60 @@
-<div class="catalogo">
-  <!-- Cabecera: enlace para volver y título de la pantalla -->
-  <header class="catalogo__cabecera">
-    <a class="catalogo__volver" routerLink="/inicio">← Volver al inicio</a>
-    <h1>Catálogo de productos</h1>
+<!-- Catálogo de productos (US03) con acciones de administrador (US06, US07 y US08). -->
+<main class="productos-container">
+  <!-- Enlace para volver a la pantalla de inicio -->
+  <nav><a routerLink="/inicio">← Volver al inicio</a></nav>
+
+  <!-- Cabecera: título y, solo para administradores, el botón de agregar (US06) -->
+  <header>
+    <div>
+      <h1>Catálogo de productos</h1>
+      <p>Inventario de la tienda</p>
+    </div>
+    @if (vm.esAdministrador()) {
+      <a class="boton" routerLink="/productos/nuevo">Agregar producto</a>
+    }
   </header>
 
-  <main>
-    @if (vm.cargando()) {
-      <!-- Escenario 2: indicador de carga centrado; role="status" avisa a lectores de pantalla -->
-      <div class="estado" role="status" aria-live="polite">
-        <span class="spinner" aria-hidden="true"></span>
-        <p>Cargando productos…</p>
-      </div>
-    } @else if (vm.error()) {
-      <!-- Escenario 3: mensaje amigable y botón para reintentar -->
-      <div class="estado" role="alert">
-        <p>{{ vm.error() }}</p>
-        <button type="button" class="boton-reintentar" (click)="vm.reintentar()">Reintentar</button>
-      </div>
-    } @else if (vm.productos().length === 0) {
-      <!-- Caso sin datos: evita dejar la pantalla en blanco -->
-      <p class="estado">No hay productos disponibles por el momento.</p>
-    } @else {
-      <!-- Escenario 1: cuadrícula con imagen, título y precio de cada producto -->
-      <ul class="rejilla" aria-label="Lista de productos">
-        @for (producto of vm.productos(); track producto.id) {
-          <li class="tarjeta">
-            <!-- La imagen se descarga en segundo plano (lazy + async) y tiene texto alternativo -->
-            <img
-              class="tarjeta__imagen"
-              [src]="producto.imagen"
-              [alt]="producto.titulo"
-              width="400"
-              height="400"
-              loading="lazy"
-              decoding="async"
-            />
-            <h2 class="tarjeta__titulo">{{ producto.titulo }}</h2>
-            <p class="tarjeta__precio">{{ producto.precio | currency }}</p>
-          </li>
-        }
-      </ul>
-    }
-  </main>
-</div>
+  <!-- Aviso de resultado de otras pantallas (por ejemplo, producto agregado o eliminado) -->
+  @if (vm.mensaje()) {
+    <div class="aviso" role="status">
+      {{ vm.mensaje() }}
+      <button type="button" (click)="vm.cerrarAviso()" aria-label="Cerrar confirmación">×</button>
+    </div>
+  }
+
+  <!-- Solo se muestra uno de estos estados a la vez -->
+  @if (vm.cargando()) {
+    <!-- US03: indicador de carga; role="status" avisa a lectores de pantalla -->
+    <div class="estado" role="status" aria-live="polite">
+      <span class="spinner" aria-hidden="true"></span>
+      <p>Cargando productos…</p>
+    </div>
+  } @else if (vm.error()) {
+    <!-- US03: mensaje amigable y botón para repetir la petición -->
+    <div class="estado" role="alert">
+      <app-alerta [mensaje]="vm.error()" />
+      <button type="button" class="boton-reintentar" (click)="vm.reintentar()">Reintentar</button>
+    </div>
+  } @else {
+    <!-- Cuadrícula con imagen, categoría, título, precio y enlace al detalle de cada producto -->
+    <section class="tarjetas-grid" aria-label="Productos">
+      @for (producto of vm.productos(); track producto.id) {
+        <article class="tarjeta">
+          <!-- La imagen se descarga en segundo plano y tiene texto alternativo -->
+          <img [src]="producto.imagen" [alt]="producto.titulo" loading="lazy" decoding="async" />
+          <div class="contenido">
+            <span class="categoria">{{ producto.categoria }}</span>
+            <h2>{{ producto.titulo }}</h2>
+            <p class="precio">${{ producto.precio | number:'1.2-2' }}</p>
+            <a [routerLink]="['/productos', producto.id]">Ver detalle →</a>
+          </div>
+        </article>
+      } @empty {
+        <!-- Caso sin datos: evita dejar la pantalla en blanco -->
+        <p>No hay productos disponibles por el momento.</p>
+      }
+    </section>
+  }
+
+  <p class="nota">Simulación local: el inventario se reinicia al apagar la API.</p>
+</main>

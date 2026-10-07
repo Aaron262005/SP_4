@@ -34,13 +34,29 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 
 // Handlers de CQRS: cada interfaz se asocia a su implementación.
 
+// ===== US01 y US02: login y cierre de sesión =====
 builder.Services.AddScoped<ICommandHandler<LoginCommand, LoginResponseDto?>, LoginCommandHandler>();
 builder.Services.AddScoped<IQueryHandler<ObtenerUsuarioPorIdQuery, UsuarioDto?>, ObtenerUsuarioPorIdQueryHandler>();
 
-// ===== US03 =====
-builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
+// ===== US03, US06, US07 y US08: productos =====
+// Documentación de Swagger para los endpoints de productos.
+builder.Services.AddTransient<Microsoft.Extensions.Options.IConfigureOptions<Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions>, TiendaOnline.Api.Swagger.ProductosSwagger>();
+
+// El repositorio debe ser Singleton: su candado y su contador de IDs viven en la instancia.
+builder.Services.AddSingleton<IProductoRepository, ProductoRepository>();
+
+// Validación del token y filtro que restringe agregar, editar y eliminar a administradores.
+builder.Services.AddScoped<IValidadorToken, ValidadorToken>();
+builder.Services.AddScoped<TiendaOnline.Api.Filters.AdministradorProductosFilter>();
+
+// Consultas: catálogo (US03) y detalle.
 builder.Services.AddScoped<IQueryHandler<ObtenerProductosQuery, IReadOnlyList<ProductoDto>>, ObtenerProductosQueryHandler>();
-// ===== FIN US03 =====
+builder.Services.AddScoped<IQueryHandler<ObtenerProductoPorIdQuery, ProductoDto?>, ObtenerProductoPorIdQueryHandler>();
+
+// Comandos: agregar (US06), editar (US07) y eliminar (US08).
+builder.Services.AddScoped<ICommandHandler<AgregarProductoCommand, ProductoDto>, AgregarProductoCommandHandler>();
+builder.Services.AddScoped<ICommandHandler<EditarProductoCommand, ProductoDto?>, EditarProductoCommandHandler>();
+builder.Services.AddScoped<ICommandHandler<EliminarProductoCommand, ProductoDto?>, EliminarProductoCommandHandler>();
 
 var app = builder.Build();
 
