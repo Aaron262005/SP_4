@@ -37,10 +37,6 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 // ===== US01 y US02: login y cierre de sesión =====
 builder.Services.AddScoped<ICommandHandler<LoginCommand, LoginResponseDto?>, LoginCommandHandler>();
 builder.Services.AddScoped<IQueryHandler<ObtenerUsuarioPorIdQuery, UsuarioDto?>, ObtenerUsuarioPorIdQueryHandler>();
-// ===== US11 =====
-builder.Services.AddScoped<TiendaOnline.Domain.Interfaces.IDirectorioRepository, TiendaOnline.Infrastructure.Repositories.DirectorioRepository>();
-builder.Services.AddScoped<TiendaOnline.Application.Interfaces.IQueryHandler<TiendaOnline.Application.Queries.ObtenerDirectorioQuery, IEnumerable<TiendaOnline.Application.DTOs.DirectorioUsuarioDto>>, TiendaOnline.Application.Handlers.QueryHandlers.ObtenerDirectorioQueryHandler>();
-// ================
 
 // ===== US03, US06, US07 y US08: productos =====
 // Documentación de Swagger para los endpoints de productos.
@@ -66,7 +62,15 @@ builder.Services.AddScoped<ICommandHandler<EliminarProductoCommand, ProductoDto?
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<IQueryHandler<ObtenerCategoriasQuery, IReadOnlyList<string>>, ObtenerCategoriasQueryHandler>();
 builder.Services.AddScoped<IQueryHandler<ObtenerProductosPorCategoriaQuery, IReadOnlyList<ProductoDto>>, ObtenerProductosPorCategoriaQueryHandler>();
-// ===== FIN US04 =====
+
+// ===== US11: directorio de usuarios =====
+builder.Services.AddScoped<IDirectorioRepository, DirectorioRepository>();
+builder.Services.AddScoped<IQueryHandler<ObtenerDirectorioQuery, IEnumerable<DirectorioUsuarioDto>>, ObtenerDirectorioQueryHandler>();
+
+// ===== US12: historial global de carritos =====
+builder.Services.AddScoped<ICarritoGlobalRepository, CarritoGlobalRepository>();
+builder.Services.AddScoped<IProductoGlobalRepository, ProductoGlobalRepository>();
+builder.Services.AddScoped<IQueryHandler<ObtenerHistorialCarritosQuery, IEnumerable<HistorialCarritoDto>>, ObtenerHistorialCarritosQueryHandler>();
 
 var app = builder.Build();
 

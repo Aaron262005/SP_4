@@ -62,6 +62,15 @@ export const routes: Routes = [
     loadComponent: () => import('./views/directorio/directorio.view').then((m) => m.DirectorioView),
   },
 
+  // ===== US12: historial global de carritos =====
+  // Solo administradores y auditores pueden verlo (mismo guard que el directorio).
+  {
+    path: 'historial-carritos',
+    canActivate: [adminAuditorGuard],
+    loadComponent: () =>
+      import('./views/historial-carritos/historial-carritos.view').then((m) => m.HistorialCarritosView),
+  },
+
   // Cualquier ruta desconocida vuelve al inicio.
   { path: '**', redirectTo: 'inicio' },
 ];

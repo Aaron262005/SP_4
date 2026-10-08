@@ -29,6 +29,7 @@
       <!-- US11: directorio de usuarios (solo Administrador y Auditor) -->
       @if (vm.rol() === 'Administrador' || vm.rol() === 'Auditor') {
         <a class="acceso" href="/directorio">Directorio de usuarios</a>
+        <a class="acceso" href="/historial-carritos">Historial de carritos</a>
       }
     </nav>
 
