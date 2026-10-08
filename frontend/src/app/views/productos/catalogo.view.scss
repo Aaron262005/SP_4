@@ -1,0 +1,100 @@
+// Estilo compartido de las historias de productos (US03, US06, US07 y US08).
+// Debe ir primero: trae tarjetas, cuadrícula, botones, avisos, etc.
+@use './productos';
+
+// ===== US03: estados de carga y error =====
+
+// ===== US04 =====
+// Barra de filtros: los chips pasan a otra línea si no caben en el ancho.
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 0 1.25rem;
+}
+
+// Chip de categoría (botón con forma de píldora).
+.chip {
+  padding: 0.4rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+  background: #fff;
+  color: #374151;
+  font-size: 0.95rem;
+  cursor: pointer;
+
+  &:hover {
+    background: #f3f4f6;
+  }
+
+  &:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 2px;
+  }
+}
+
+// Chip de la categoría seleccionada.
+.chip--activo {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #fff;
+
+  &:hover {
+    background: #1d4ed8;
+  }
+}
+// ===== FIN US04 =====
+
+// Estados de carga, error y vacío: centrados en el área de contenido.
+.estado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 50vh;
+  text-align: center;
+}
+
+// Spinner circular animado.
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #e5e7eb;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Respeta a quien pidió menos movimiento en su sistema.
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 3s;
+  }
+}
+
+// Botón para repetir la petición cuando falla la carga del catálogo.
+.boton-reintentar {
+  padding: 0.6rem 1.4rem;
+  border: 0;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    background: #1d4ed8;
+  }
+
+  &:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 2px;
+  }
+}
