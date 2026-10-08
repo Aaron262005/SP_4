@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard, invitadoGuard } from './core/guards/auth.guard';
 import { administradorProductosGuard } from './core/guards/administrador-productos.guard';
+import { adminAuditorGuard } from './core/guards/admin-auditor.guard';
 
 /**
  * Rutas de la aplicación. Cada pantalla se carga con LAZY LOADING (loadComponent):
@@ -60,6 +61,23 @@ export const routes: Routes = [
     path: 'productos/:id',
     canActivate: [authGuard],
     loadComponent: () => import('./views/productos/detalle-producto.view').then((m) => m.DetalleProductoView),
+  },
+
+  // ===== US11: directorio de usuarios =====
+  // Solo administradores y auditores pueden verlo.
+  {
+    path: 'directorio',
+    canActivate: [adminAuditorGuard],
+    loadComponent: () => import('./views/directorio/directorio.view').then((m) => m.DirectorioView),
+  },
+
+  // ===== US12: historial global de carritos =====
+  // Solo administradores y auditores pueden verlo (mismo guard que el directorio).
+  {
+    path: 'historial-carritos',
+    canActivate: [adminAuditorGuard],
+    loadComponent: () =>
+      import('./views/historial-carritos/historial-carritos.view').then((m) => m.HistorialCarritosView),
   },
 
   // Cualquier ruta desconocida vuelve al inicio.

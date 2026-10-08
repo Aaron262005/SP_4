@@ -62,7 +62,15 @@ builder.Services.AddScoped<ICommandHandler<EliminarProductoCommand, ProductoDto?
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<IQueryHandler<ObtenerCategoriasQuery, IReadOnlyList<string>>, ObtenerCategoriasQueryHandler>();
 builder.Services.AddScoped<IQueryHandler<ObtenerProductosPorCategoriaQuery, IReadOnlyList<ProductoDto>>, ObtenerProductosPorCategoriaQueryHandler>();
-// ===== FIN US04 =====
+
+// ===== US11: directorio de usuarios =====
+builder.Services.AddScoped<IDirectorioRepository, DirectorioRepository>();
+builder.Services.AddScoped<IQueryHandler<ObtenerDirectorioQuery, IEnumerable<DirectorioUsuarioDto>>, ObtenerDirectorioQueryHandler>();
+
+// ===== US12: historial global de carritos =====
+builder.Services.AddScoped<ICarritoGlobalRepository, CarritoGlobalRepository>();
+builder.Services.AddScoped<IProductoGlobalRepository, ProductoGlobalRepository>();
+builder.Services.AddScoped<IQueryHandler<ObtenerHistorialCarritosQuery, IEnumerable<HistorialCarritoDto>>, ObtenerHistorialCarritosQueryHandler>();
 
 // ===== US09 y US10 =====
 builder.Services.AddScoped<TiendaOnline.Domain.Interfaces.Carrito.ICarritoRepository, TiendaOnline.Infrastructure.Repositories.Carrito.CarritoRepository>();

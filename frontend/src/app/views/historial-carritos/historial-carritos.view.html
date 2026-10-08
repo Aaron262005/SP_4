@@ -1,0 +1,38 @@
+<div class="historial-container">
+  <a class="boton-volver" href="/inicio">Volver</a>
+  <h2>Monitor Global de Carritos</h2>
+
+  @if (vm.error()) { 
+    <app-alerta [mensaje]="vm.error()!"></app-alerta> 
+  }
+  
+  @if (vm.cargando()) { 
+    <p class="cargando-texto">Cargando registros...</p> 
+  }
+
+  @if (!vm.cargando() && vm.carritos().length > 0) {
+    <div class="lista-carritos">
+      @for (carrito of vm.carritos(); track carrito.id) {
+        <div class="carrito-card" (click)="vm.toggleExpandir(carrito.id)">
+          <div class="carrito-header">
+            <span><strong>ID Carrito:</strong> {{ carrito.id }}</span>
+            <span><strong>Usuario ID:</strong> {{ carrito.usuarioId }}</span>
+            <span><strong>Fecha:</strong> {{ carrito.fechaCreacion | date:'medium' }}</span>
+            <span class="icono-expandir">{{ vm.carritoExpandidoId() === carrito.id ? '▲' : '▼' }}</span>
+          </div>
+          
+          @if (vm.carritoExpandidoId() === carrito.id) {
+            <div class="carrito-body">
+              <h4>Desglose de Artículos</h4>
+              <ul>
+                @for (item of carrito.items; track item.productoId) {
+                  <li>ID: {{ item.productoId }} - <strong>{{ item.tituloProducto }}</strong> (Cantidad: {{ item.cantidad }})</li>
+                }
+              </ul>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

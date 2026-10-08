@@ -1,13 +1,6 @@
-/** Un producto dentro del carrito de compras. */
-export interface ItemCarrito {
-  productoId: number;
-  nombre: string;
-  precio: number;
-  cantidad: number;
-}
-
 /**
- * Interfaz que representa la estructura de un artículo en el carrito del cliente.
+ * Un artículo dentro del carrito del cliente (US09 y US10).
+ * Sus campos coinciden con el ItemCarritoDto que devuelve la API.
  */
 export interface ItemCarrito {
   id: number;
@@ -16,11 +9,11 @@ export interface ItemCarrito {
   nombreProducto: string;
   precioUnitario: number;
   cantidad: number;
-  subtotal?: number;  
+  subtotal?: number;
 }
 
 /**
- * DTO de solicitud HTTP para agregar un ítem al carrito (US09).
+ * Datos que se envían a la API para agregar un artículo al carrito (US09).
  */
 export interface AgregarItemRequest {
   usuarioId: number;

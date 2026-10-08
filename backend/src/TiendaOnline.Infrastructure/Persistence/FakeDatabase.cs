@@ -45,5 +45,51 @@ public class FakeDatabase
         new Producto(103, "Teclado Keychron K2", 1800, "Teclado mecánico compacto.", "Accesorios", "https://placehold.co/640x480/png?text=Teclado")
     };
 
+    // ===== US09 y US10: carrito de cada cliente =====
+    /// <summary>
+    /// "Tabla" con los artículos que cada cliente tiene en su carrito (US09 y US10).
+    /// Es estática, tal como la dejó US09, y empieza vacía.
+    /// </summary>
     public static List<TiendaOnline.Domain.Entities.Carrito.ItemCarrito> ItemsCarrito { get; } = new();
+
+    // ===== US11: directorio de usuarios =====
+    /// <summary>
+    /// "Tabla" de perfiles del directorio (US11). Es estática, tal como la dejó US11,
+    /// para no cambiar el código que ya la consulta como FakeDatabase.Directorios.
+    /// </summary>
+    public static List<PerfilDirectorio> Directorios = new()
+    {
+        // Id, nombre, correo, teléfono, dirección (calle, ciudad, coordenadas)
+        new PerfilDirectorio(1, "Ana Administradora", "ana@tienda.com", "555-0001", new Direccion("Calle Principal 123", "Ciudad de México", "19.4326, -99.1332")),
+        new PerfilDirectorio(4, "Carlos Cliente", "carlos@gmail.com", "555-0004", new Direccion("Avenida Siempre Viva 742", "Querétaro", "20.5881, -100.3899")),
+        new PerfilDirectorio(5, "Sofía Cliente", "sofia@hotmail.com", "555-0005", new Direccion("Boulevard del Sol 45", "Monterrey", "25.6866, -100.3161"))
+    };
+
+    // ===== US12: historial global de carritos =====
+    /// <summary>
+    /// Productos que referencian los carritos del historial (US12). Estática, tal como la dejó US12.
+    /// Repite los productos 101 a 103 de la tabla Productos: conviene unificarlas después.
+    /// </summary>
+    public static List<ProductoGlobal> ProductosGlobales = new()
+    {
+        // Id, nombre
+        new ProductoGlobal(101, "MSI Titan 18 HX"),
+        new ProductoGlobal(102, "Mouse Logitech G Pro"),
+        new ProductoGlobal(103, "Teclado Keychron K2")
+    };
+
+    /// <summary>"Tabla" de carritos de los clientes con fecha y productos comprados (US12).</summary>
+    public static List<CarritoGlobal> CarritosGlobales = new()
+    {
+        // Id del carrito, id del cliente, fecha, ítems (id del producto, cantidad)
+        new CarritoGlobal(1, 4, new DateTime(2026, 10, 01, 14, 30, 0), new List<ItemCarritoGlobal>
+        {
+            new ItemCarritoGlobal(101, 1),
+            new ItemCarritoGlobal(102, 2)
+        }),
+        new CarritoGlobal(2, 5, new DateTime(2026, 10, 05, 9, 15, 0), new List<ItemCarritoGlobal>
+        {
+            new ItemCarritoGlobal(103, 1)
+        })
+    };
 }

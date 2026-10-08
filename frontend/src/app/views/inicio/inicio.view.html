@@ -21,9 +21,18 @@
 
   <!-- Contenido: cambia según el perfil asignado en el login -->
   <main class="contenido">
-    <!-- ===== US06-US07-US08: acceso al módulo de productos ===== -->
-    <p><a href="/productos">Abrir catálogo de productos →</a></p>
-    <!-- ===== FIN US06-US07-US08 ===== -->
+    <!-- ===== Accesos rápidos: botones azul cielo según el rol ===== -->
+    <nav class="accesos" aria-label="Accesos rápidos">
+      <!-- US03, US06, US07 y US08: catálogo de productos -->
+      <a class="acceso" href="/productos">Catálogo de productos</a>
+
+      <!-- US11: directorio de usuarios (solo Administrador y Auditor) -->
+      @if (vm.rol() === 'Administrador' || vm.rol() === 'Auditor') {
+        <a class="acceso" href="/directorio">Directorio de usuarios</a>
+        <a class="acceso" href="/historial-carritos">Historial de carritos</a>
+      }
+    </nav>
+
     @switch (vm.rol()) {
       @case ('Administrador') {
         <section class="panel">
