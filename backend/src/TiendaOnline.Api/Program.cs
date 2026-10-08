@@ -64,6 +64,14 @@ builder.Services.AddScoped<IQueryHandler<ObtenerCategoriasQuery, IReadOnlyList<s
 builder.Services.AddScoped<IQueryHandler<ObtenerProductosPorCategoriaQuery, IReadOnlyList<ProductoDto>>, ObtenerProductosPorCategoriaQueryHandler>();
 // ===== FIN US04 =====
 
+// ===== US09 y US10 =====
+builder.Services.AddScoped<TiendaOnline.Domain.Interfaces.Carrito.ICarritoRepository, TiendaOnline.Infrastructure.Repositories.Carrito.CarritoRepository>();
+builder.Services.AddScoped<TiendaOnline.Application.Interfaces.ICommandHandler<TiendaOnline.Application.Commands.Carrito.AgregarItemCarritoCommand, TiendaOnline.Application.DTOs.Carrito.ItemCarritoDto?>, TiendaOnline.Application.Handlers.CommandHandlers.Carrito.AgregarItemCarritoCommandHandler>();
+builder.Services.AddScoped<TiendaOnline.Application.Interfaces.ICommandHandler<TiendaOnline.Application.Commands.Carrito.ActualizarCantidadItemCommand, TiendaOnline.Application.DTOs.Carrito.ItemCarritoDto?>, TiendaOnline.Application.Handlers.CommandHandlers.Carrito.ActualizarCantidadItemCommandHandler>();
+builder.Services.AddScoped<TiendaOnline.Application.Interfaces.ICommandHandler<TiendaOnline.Application.Commands.Carrito.EliminarItemCarritoCommand, bool>, TiendaOnline.Application.Handlers.CommandHandlers.Carrito.EliminarItemCarritoCommandHandler>();
+builder.Services.AddScoped<TiendaOnline.Application.Interfaces.IQueryHandler<TiendaOnline.Application.Queries.Carrito.ObtenerCarritoPorUsuarioQuery, List<TiendaOnline.Application.DTOs.Carrito.ItemCarritoDto>>, TiendaOnline.Application.Handlers.QueryHandlers.Carrito.ObtenerCarritoPorUsuarioQueryHandler>();
+// ===== FIN US09 y US10 =====
+
 var app = builder.Build();
 
 // Swagger solo en desarrollo.

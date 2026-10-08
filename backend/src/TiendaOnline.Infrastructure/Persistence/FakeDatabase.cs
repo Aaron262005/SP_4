@@ -44,4 +44,6 @@ public class FakeDatabase
         new Producto(102, "Mouse Logitech G Pro", 1200, "Mouse inalámbrico de precisión.", "Accesorios", "https://placehold.co/640x480/png?text=Mouse"),
         new Producto(103, "Teclado Keychron K2", 1800, "Teclado mecánico compacto.", "Accesorios", "https://placehold.co/640x480/png?text=Teclado")
     };
+
+    public static List<TiendaOnline.Domain.Entities.Carrito.ItemCarrito> ItemsCarrito { get; } = new();
 }
