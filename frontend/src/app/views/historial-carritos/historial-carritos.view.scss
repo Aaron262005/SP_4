@@ -52,3 +52,24 @@
     }
   }
 }
+// Botón rojo para regresar al inicio.
+.boton-volver {
+  display: inline-block;
+  margin-bottom: 1rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  background: #dc2626;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: #b91c1c;
+  }
+
+  &:focus-visible {
+    outline: 3px solid #fca5a5;
+    outline-offset: 2px;
+  }
+}

@@ -1,0 +1,40 @@
+<div class="directorio-container">
+
+  <a class="boton-volver" href="/inicio">Volver</a>
+  <h2>Directorio Global de Usuarios</h2>
+
+  <!-- Estado de error -->
+  @if (vm.error()) {
+    <app-alerta [mensaje]="vm.error()!"></app-alerta>
+    <button class="btn-reintentar" (click)="vm.cargarUsuarios()">Reintentar Conexión</button>
+  }
+
+  <!-- Estado de carga -->
+  @if (vm.cargando()) {
+    <div class="loader-container">
+      <div class="spinner"></div>
+      <p>Descargando directorio de usuarios...</p>
+    </div>
+  }
+
+  <!-- Lista de usuarios -->
+  @if (!vm.cargando() && !vm.error() && vm.usuarios().length > 0) {
+    <div class="tarjetas-grid">
+      @for (user of vm.usuarios(); track user.id) {
+        <div class="tarjeta-usuario">
+          <div class="tarjeta-header">
+            <h3>{{ user.nombreCompleto }}</h3>
+            <span class="badge">ID: {{ user.id }}</span>
+          </div>
+          <div class="tarjeta-body">
+            <p><strong>✉️ Correo:</strong> {{ user.correo }}</p>
+            <p><strong>📞 Teléfono:</strong> {{ user.telefono }}</p>
+            <hr>
+            <p><strong>📍 Dirección:</strong> {{ user.direccion.calle }}, {{ user.direccion.ciudad }}</p>
+            <p class="coordenadas"><small>GPS: {{ user.direccion.coordenadas }}</small></p>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

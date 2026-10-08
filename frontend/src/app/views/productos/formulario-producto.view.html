@@ -1,0 +1,35 @@
+<!-- US06 y US07: formulario accesible, precargado en edición y validado antes de HTTP. -->
+<main class="productos-container formulario">
+  <nav><a routerLink="/productos">← Volver al catálogo</a></nav>
+  <h1>{{ vm.id === null ? 'Agregar producto' : 'Editar producto' }}</h1>
+  <p>Completa todos los campos del artículo.</p>
+  @if (vm.mensaje()) { <div class="aviso" role="status">{{ vm.mensaje() }}</div> }
+  @if (vm.error()) { <app-alerta [mensaje]="vm.error()" /> }
+  @if (vm.cargando()) { <p role="status">Cargando información del producto…</p> }
+  @if (!vm.listo() && !vm.cargando()) { <button type="button" (click)="vm.cargar()">Reintentar consulta</button> }
+  @if (vm.listo()) {
+    <form [formGroup]="vm.formulario" (ngSubmit)="vm.guardar()" novalidate>
+      <fieldset [disabled]="vm.guardando()" [attr.aria-busy]="vm.guardando()">
+        <legend class="sr-only">Información del producto</legend>
+        <div class="campo"><label for="titulo">Título</label><input id="titulo" formControlName="titulo" required [class.invalido]="vm.invalido('titulo')" [attr.aria-invalid]="vm.invalido('titulo')" aria-describedby="titulo-error" type="text" />
+          @if (vm.invalido('titulo')) { <span class="error-campo" id="titulo-error">Escribe el título del producto.</span> }
+        </div>
+        <div class="campo"><label for="precio">Precio</label><input id="precio" formControlName="precio" required [class.invalido]="vm.invalido('precio')" [attr.aria-invalid]="vm.invalido('precio')" aria-describedby="precio-error" type="number" step="any" inputmode="decimal" />
+          @if (vm.invalido('precio')) { <span class="error-campo" id="precio-error">Ingresa un precio numérico.</span> }
+        </div>
+        <div class="campo"><label for="descripcion">Descripción</label><textarea id="descripcion" formControlName="descripcion" required [class.invalido]="vm.invalido('descripcion')" [attr.aria-invalid]="vm.invalido('descripcion')" aria-describedby="descripcion-error" rows="4"></textarea>
+          @if (vm.invalido('descripcion')) { <span class="error-campo" id="descripcion-error">Escribe una descripción.</span> }
+        </div>
+        <div class="campo"><label for="categoria">Categoría</label><input id="categoria" formControlName="categoria" required [class.invalido]="vm.invalido('categoria')" [attr.aria-invalid]="vm.invalido('categoria')" aria-describedby="categoria-error" type="text" />
+          @if (vm.invalido('categoria')) { <span class="error-campo" id="categoria-error">Escribe la categoría.</span> }
+        </div>
+        <div class="campo"><label for="imagen">URL de imagen</label><input id="imagen" formControlName="imagen" required [class.invalido]="vm.invalido('imagen')" [attr.aria-invalid]="vm.invalido('imagen')" aria-describedby="imagen-error" type="url" />
+          @if (vm.invalido('imagen')) { <span class="error-campo" id="imagen-error">Ingresa una URL válida que empiece con http:// o https://.</span> }
+        </div>
+        <div class="acciones"><button class="boton" type="submit" [disabled]="vm.guardando()">{{ vm.guardando() ? 'Guardando…' : 'Guardar' }}</button>
+          @if (!vm.guardando()) { <a [routerLink]="vm.id === null ? ['/productos'] : ['/productos', vm.id]">Cancelar</a> }
+        </div>
+      </fieldset>
+    </form>
+  }
+</main>
