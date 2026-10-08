@@ -45,6 +45,13 @@ public class FakeDatabase
         new Producto(103, "Teclado Keychron K2", 1800, "Teclado mecánico compacto.", "Accesorios", "https://placehold.co/640x480/png?text=Teclado")
     };
 
+    // ===== US09 y US10: carrito de cada cliente =====
+    /// <summary>
+    /// "Tabla" con los artículos que cada cliente tiene en su carrito (US09 y US10).
+    /// Es estática, tal como la dejó US09, y empieza vacía.
+    /// </summary>
+    public static List<TiendaOnline.Domain.Entities.Carrito.ItemCarrito> ItemsCarrito { get; } = new();
+
     // ===== US11: directorio de usuarios =====
     /// <summary>
     /// "Tabla" de perfiles del directorio (US11). Es estática, tal como la dejó US11,
