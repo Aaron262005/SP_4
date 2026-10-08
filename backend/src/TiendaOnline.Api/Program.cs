@@ -37,6 +37,10 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 // ===== US01 y US02: login y cierre de sesión =====
 builder.Services.AddScoped<ICommandHandler<LoginCommand, LoginResponseDto?>, LoginCommandHandler>();
 builder.Services.AddScoped<IQueryHandler<ObtenerUsuarioPorIdQuery, UsuarioDto?>, ObtenerUsuarioPorIdQueryHandler>();
+// ===== US11 =====
+builder.Services.AddScoped<TiendaOnline.Domain.Interfaces.IDirectorioRepository, TiendaOnline.Infrastructure.Repositories.DirectorioRepository>();
+builder.Services.AddScoped<TiendaOnline.Application.Interfaces.IQueryHandler<TiendaOnline.Application.Queries.ObtenerDirectorioQuery, IEnumerable<TiendaOnline.Application.DTOs.DirectorioUsuarioDto>>, TiendaOnline.Application.Handlers.QueryHandlers.ObtenerDirectorioQueryHandler>();
+// ================
 
 // ===== US03, US06, US07 y US08: productos =====
 // Documentación de Swagger para los endpoints de productos.

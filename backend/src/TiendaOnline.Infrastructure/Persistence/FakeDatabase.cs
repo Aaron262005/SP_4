@@ -44,4 +44,16 @@ public class FakeDatabase
         new Producto(102, "Mouse Logitech G Pro", 1200, "Mouse inalámbrico de precisión.", "Accesorios", "https://placehold.co/640x480/png?text=Mouse"),
         new Producto(103, "Teclado Keychron K2", 1800, "Teclado mecánico compacto.", "Accesorios", "https://placehold.co/640x480/png?text=Teclado")
     };
+
+    // ===== US11: directorio de usuarios =====
+    /// <summary>
+    /// "Tabla" de perfiles del directorio (US11)
+    /// </summary>
+    public static List<PerfilDirectorio> Directorios = new()
+    {
+        // Id, nombre, correo, teléfono, dirección (calle, ciudad, coordenadas)
+        new PerfilDirectorio(1, "Ana Administradora", "ana@tienda.com", "555-0001", new Direccion("Calle Principal 123", "Ciudad de México", "19.4326, -99.1332")),
+        new PerfilDirectorio(4, "Carlos Cliente", "carlos@gmail.com", "555-0004", new Direccion("Avenida Siempre Viva 742", "Querétaro", "20.5881, -100.3899")),
+        new PerfilDirectorio(5, "Sofía Cliente", "sofia@hotmail.com", "555-0005", new Direccion("Boulevard del Sol 45", "Monterrey", "25.6866, -100.3161"))
+    };
 }
