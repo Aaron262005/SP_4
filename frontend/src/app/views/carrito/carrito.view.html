@@ -1,0 +1,66 @@
+<div class="carrito-container">
+  <h2>Mi Carrito de Compras</h2>
+
+  @if (vm.error()) {
+    <app-alerta [mensaje]="vm.error()!" />
+  }
+
+  @if (vm.esAuditor()) {
+    <div class="alerta-auditor">
+      <em>Modo Auditor: Puedes visualizar el carrito pero no realizar modificaciones ni compras.</em>
+    </div>
+  }
+
+  @if (vm.cargando()) {
+    <p>Cargando productos...</p>
+  } @else if (vm.items().length === 0) {
+    <div class="carrito-vacio">
+      <p>Tu carrito está vacío.</p>
+    </div>
+  } @else {
+    <div class="tabla-container">
+      <table class="tabla-carrito">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Subtotal</th>
+            @if (!vm.esAuditor()) {
+              <th>Acciones</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of vm.items(); track item.id) {
+            <tr>
+              <td>{{ item.nombreProducto }}</td>
+              <td>${{ item.precioUnitario | number:'1.2-2' }}</td>
+              <td>
+                @if (vm.esAuditor()) {
+                  <span>{{ item.cantidad }}</span>
+                } @else {
+                  <div class="controles-cantidad">
+                    <button (click)="vm.disminuirCantidad(item.id, item.cantidad)" class="btn-qty">-</button>
+                    <span>{{ item.cantidad }}</span>
+                    <button (click)="vm.aumentarCantidad(item.id, item.cantidad)" class="btn-qty">+</button>
+                  </div>
+                }
+              </td>
+              <td>${{ (item.precioUnitario * item.cantidad) | number:'1.2-2' }}</td>
+              @if (!vm.esAuditor()) {
+                <td>
+                  <button (click)="vm.eliminarItem(item.id)" class="btn-eliminar">Eliminar</button>
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <div class="resumen-carrito">
+        <h3>Total: ${{ vm.totalMonto() | number:'1.2-2' }}</h3>
+      </div>
+    </div>
+  }
+</div>

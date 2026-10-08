@@ -47,6 +47,15 @@ export const routes: Routes = [
     canActivate: [authGuard, administradorProductosGuard],
     loadComponent: () => import('./views/productos/formulario-producto.view').then((m) => m.FormularioProductoView),
   },
+
+  // ===== US10 =====
+  {
+    path: 'carrito',
+    canActivate: [authGuard],
+    loadComponent: () => import('./views/carrito/carrito.view').then(m => m.CarritoView)
+  },
+  // ===== FIN US10 =====
+  
   // Detalle de un producto; requiere sesión.
   {
     path: 'productos/:id',
